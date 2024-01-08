@@ -1,31 +1,24 @@
-import { run as loaderRun } from './run';
-import { destroy } from './destroy';
+import { components, deferredComponents } from './components.js';
+import { factory } from './factory.js';
+import { run as loaderRun, destroy } from './run.js';
 
-/**
- * Run the loader on an element to get all attributes that corresponds to a component
- */
 window.ncObservers = window.ncObservers || {};
-export const observe = (element = window.document, initAttr = 'data-nc') => {
-  if (!window.ncObservers[initAttr]) {
-    // if there is already a listener it should be unique
-    // create observer and check for new nodes added
-    window.ncObservers[initAttr] = new MutationObserver(
+export const observe = (element = window.document, prefix = '', excludeSelectors = '') => {
+  const ns = prefix || 'class';
+  if (!window.ncObservers[ns]) {
+    window.ncObservers[ns] = new MutationObserver(
       (mutations) => mutations.forEach((mutation) => {
-        // define actions for each mutation type
         const nodeActions = {
           removedNodes: destroy,
           addedNodes: loaderRun
         };
-        // for each mutation type
         Object.keys(nodeActions).forEach((type) => {
-          // only if there are new nodes in the mutation type
           if (mutation[type].length > 0) {
-            // should be an array of 1 length always.
             Array.prototype.slice.call(mutation[type])
               .forEach((node) => {
                 if (node.querySelector) {
                   // run or destroy etc.
-                  nodeActions[type](node, initAttr);
+                  nodeActions[type](node, prefix, excludeSelectors);
                 }
               });
           }
@@ -33,9 +26,31 @@ export const observe = (element = window.document, initAttr = 'data-nc') => {
       })
     );
 
-    window.ncObservers[initAttr].observe(element, {
+    window.ncObservers[ns].observe(element, {
       subtree: true,
       childList: true
     });
   }
+};
+
+export const domReady = (event = 'DOMContentLoaded', element = window.document, prefix = '', excludeSelectors = '') => {
+  const ready = document.readyState === 'complete'
+    || document.readyState === 'interactive';
+  if (!ready) {
+    window.addEventListener(event, () => {
+      loaderRun(element, prefix, excludeSelectors);
+    });
+  } else {
+    loaderRun(element, prefix, excludeSelectors);
+  }
+};
+
+export const register = (newComponents) => {
+  Object.keys(newComponents).forEach((name) => {
+    components[name] = newComponents[name];
+    if (deferredComponents[name]) {
+      deferredComponents[name].forEach(({ element }) => factory(name, element));
+      delete deferredComponents[name];
+    }
+  });
 };

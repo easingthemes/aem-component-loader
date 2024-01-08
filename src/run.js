@@ -1,23 +1,50 @@
-import { factory } from './factory';
-import { scan } from './scan';
+import { instances } from './components.js';
+import { factory } from './factory.js';
 
-/**
- *  Run the loader on an element to get all attributes that corresponds to a component
- *  @param {HTMLElement|Document} [element] root element
- *  @param {string} [initAttr] attribute name
- */
+const scan = (element = window.document, prefix = '', excludeSelectors = '') => {
+  const attrSelector = prefix ? `[class^="${prefix}"]` : '[class]:not([class=""]';
+  const selectors = excludeSelectors ? `${attrSelector}:not(${excludeSelectors})` : attrSelector;
+  const nodes = Array.prototype.slice.call(element.querySelectorAll(selectors));
+  if (element.classList.length > 0) {
+    nodes.push(element);
+  }
+  return nodes;
+};
 
-export const run = (element = window.document, initAttr = 'data-nc') =>
-  scan(element, initAttr).forEach(
+const getComponentNames = (node, prefix) => {
+  const classNames = node.classList;
+  return prefix ? classNames.filter((n) => n.startsWith(prefix)) : classNames[0];
+};
+
+export const run = (element = window.document, prefix = '', excludeSelectors = '') =>
+  scan(element, prefix, excludeSelectors).forEach(
     (node) => setTimeout(() => {
-      // when we have coral polyfills (forced all browsers at cloud env), it creates elements twice + and move then around.
-      // this prevents observer to reinitialize components when same element is added multiple times added to the dom
       if (!node.initialized) {
         node.initialized = true;
-        // get the component that needs, will load by attribute
-        const componentNames = node.getAttribute(initAttr).split(',');
+        const componentNames = getComponentNames(node, prefix);
         componentNames.forEach((name) =>
-          factory(name, node, initAttr));
+          factory(name, node));
       }
+    })
+  );
+
+export const runComponent = (name, element = window.document, prefix = '', excludeSelectors = '') =>
+  scan(element, prefix, excludeSelectors)
+    .forEach((node) => setTimeout(() =>
+      factory(name, node)));
+
+export const destroy = (element = window.document, prefix = '', excludeSelectors = '') =>
+  scan(element, prefix, excludeSelectors).forEach(
+    (node) => setTimeout(() => {
+      const componentNames = getComponentNames(node, prefix);
+      componentNames.forEach((name) => {
+        if (instances[name]) {
+          instances[name].forEach((instance) => {
+            if (node.uuid === instance.el.uuid && node.initialized && instance.disconnectedCallback) {
+              instance.disconnectedCallback();
+            }
+          });
+        }
+      });
     })
   );

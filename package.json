@@ -1,7 +1,7 @@
 {
-  "name": "@netcentric/component-loader",
-  "version": "1.0.1",
-  "description": "Load components for plain javascript projects",
+  "name": "@draganfilipovic/aem-component-loader",
+  "version": "1.0.0",
+  "description": "Load components for AEM Edge Delivery projects",
   "license": "Apache-2.0",
   "private": false,
   "publishConfig": {
@@ -9,11 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/netcentric/component-loader"
+    "url": "https://github.com/easingthemes/aem-component-loader"
   },
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
+  "type": "module",
   "scripts": {
-    "test": "eslint ./src"
+    "build": "npm run test; npm run esbuild",
+    "test": "eslint ./src",
+    "esbuild": "esbuild --bundle ./src/index.js --outdir=dist --format=esm --target=es2020 --minify"
   },
   "keywords": [
     "Component",
@@ -26,9 +29,10 @@
     "iOS >= 9",
     "Android >= 5"
   ],
-  "author": "Netcentric",
+  "author": "draganfilipovic",
   "devDependencies": {
     "@netcentric/eslint-config": "^1.0.0",
+    "esbuild": "^0.19.11",
     "eslint": "^8.50.0"
   }
 }

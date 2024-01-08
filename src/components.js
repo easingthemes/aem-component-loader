@@ -1,7 +1,6 @@
-/**
- * Collection of components classes.
- * Added to the global scope to allow multiple scope components to be shared on the same list
- */
-
-window.ncComponents = window.ncComponents || {};
-export const components = window.ncComponents;
+window.aemComponents = window.aemComponents || {};
+export const components = window.aemComponents;
+window.aemComponentsInstances = window.aemComponentsInstances || {};
+export const instances = window.aemComponentsInstances;
+window.aemDeferredComponents = window.aemDeferredComponents || {};
+export const deferredComponents = window.aemDeferredComponents;
