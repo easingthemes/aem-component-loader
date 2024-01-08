@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/easingthemes/aem-component-loader/compare/v1.0.0...v1.0.1) (2024-01-08)
+
+
+### Bug Fixes
+
+* add package files list ([0befa70](https://github.com/easingthemes/aem-component-loader/commit/0befa70a866d8b12be338622bf4c80f371b94c9c))
+
 # 1.0.0 (2024-01-08)
 * Convert to AEM Edge Delivery specific
 
