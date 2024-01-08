@@ -1,3 +1,31 @@
+# 1.0.0 (2024-01-08)
+
+
+### Bug Fixes
+
+* add mjs build ([4a83dc4](https://github.com/easingthemes/aem-component-loader/commit/4a83dc411ffbddaf924037e8d5401b993c1ae94c))
+* Initial release with lint updates ([ce9df95](https://github.com/easingthemes/aem-component-loader/commit/ce9df95a61762bc65d1a967a8cb3e6418d7d1125))
+* remove src from npmignore ([d626b1b](https://github.com/easingthemes/aem-component-loader/commit/d626b1bcd4267f53b2474e2e51778cb0b9904976))
+* Trigger Manual Release ([4d86013](https://github.com/easingthemes/aem-component-loader/commit/4d86013fa60f3f5ce622f9fa4f4c305f743487d1))
+
+
+### chore
+
+* **release:** 1.0.0 [skip ci] ([9bf1e41](https://github.com/easingthemes/aem-component-loader/commit/9bf1e41c5efbd60983c63ce24394cb7cfb8d00bc))
+
+
+* BREAKING CHANGE: Trigger Manual Release ([7a83d3a](https://github.com/easingthemes/aem-component-loader/commit/7a83d3a6e262e47b8887b0f4f6e50a3df8d54119))
+
+
+### BREAKING CHANGES
+
+* **release:** Trigger Manual Release ([7a83d3a](https://github.com/netcentric/component-loader/commit/7a83d3a6e262e47b8887b0f4f6e50a3df8d54119))
+
+### BREAKING CHANGES
+
+* Forced Manual Release without code changes
+* Forced Manual Release without code changes
+
 ## [1.0.1](https://github.com/netcentric/component-loader/compare/v1.0.0...v1.0.1) (2023-09-24)
 
 
