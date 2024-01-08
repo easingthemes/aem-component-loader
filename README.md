@@ -1,16 +1,16 @@
-# @netcentric/component-loader
+# @draganfilipovic/aem-component-loader
 
 Description
 
-[![Version](https://img.shields.io/npm/v/@netcentric/component-loader.svg)](https://npmjs.org/package/@netcentric/component-loader)
-[![Build Status](https://github.com/netcentric/component-loader/workflows/CI/badge.svg?branch=main)](https://github.com/netcentric/component-loader/actions)
-[![CodeQL Analysis](https://github.com/netcentric/component-loader/workflows/CodeQL/badge.svg?branch=main)](https://github.com/netcentric/component-loader/actions)
+[![Version](https://img.shields.io/npm/v/@draganfilipovic/aem-component-loader.svg)](https://npmjs.org/package/@draganfilipovic/aem-component-loader)
+[![Build Status](https://github.com/easingthemes/aem-component-loader/workflows/CI/badge.svg?branch=main)](https://github.com/easingthemes/aem-component-loader/actions)
+[![CodeQL Analysis](https://github.com/easingthemes/aem-component-loader/workflows/CodeQL/badge.svg?branch=main)](https://github.com/easingthemes/aem-component-loader/actions)
 [![semver: semantic-release](https://img.shields.io/badge/semver-semantic--release-blue.svg)](https://github.com/semantic-release/semantic-release)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Installation
 
-```npm install @netcentric/component-loader```
+```npm install @draganfilipovic/aem-component-loader```
 
 **important!**
 
@@ -21,13 +21,13 @@ Eg:
 ```javascript
 // webpack babel-loader config
 module.exports = {
-  exclude: /node_modules\/(?!@netcentric)/,
+  exclude: /node_modules\/(?!@draganfilipovic)/,
   loader: 'babel-loader',
   ...
 };
 ```
 
-Here we are excluding node_modules, except the ones under node_modules/@netcentric/*
+Here we are excluding node_modules, except the ones under node_modules/@draganfilipovic/*
 
 
 ## Usage
@@ -46,8 +46,7 @@ run();
 ```
 3. Bind component to DOM
 ```html
-<div data-nc="componentName"
-     data-nc-params-componentName="{}"></div>
+<div class="componentName"></div>
 ```
 
 ### Example
@@ -55,13 +54,13 @@ run();
 #### in the component file you should register your component
 
 ```javascript
-import { register } from '@netcentric/component-loader';
+import { register } from '@draganfilipovic/aem-component-loader';
 
 class Text {
   ...
 }
 // register your component to be loaded
-register({ Text });
+register({ text: Text });
 ```
 
 #### At your main entry file you should run all registered components
@@ -70,7 +69,7 @@ register({ Text });
 import {
   observe,
   run
-} from '@netcentric/component-loader';
+} from '@draganfilipovic/aem-component-loader';
 
 // Run all registered component
 run();
@@ -88,17 +87,14 @@ This version uses standalone functions to allow tree shaking and to only use nec
 Adding one component
 
 ```
-<div data-nc="Component1"
-     data-nc-params-Component1="{}"></div>
+<div class="Component1"></div>
 ```
 
 
 Adding more than one component
 
 ```
-<div data-nc="Component1,Component2"
-     data-nc-params-Component1="{}"
-     data-nc-params-Component2="{}"></div>
+<div class="prefix-Component1, prefix-Component2"></div>
 ```
 
 ### register
@@ -113,9 +109,8 @@ You can register individual component, or list
  * Constant with a object that contain collection of components classes.
  * 
  * @param {object} newComponents - Components collection { name: definition }
- * @param {number} [level] - level of inheritance
  */
-  const register = (newComponents, level) => {}
+  const register = (newComponents) => {}
 ```
 
 #### Examples
@@ -143,37 +138,6 @@ register({ components });
 
 ```
 
-Level is used in multilevel inheritance, eg if you have one base project with component HTML,
-and want to override just JS part in sub project
-
-1. Base project
-
-```javascript
-import { register } from '@netcentric/component-loader';
-
-class Title {
-  init() {
-    console.log('level 0 Title');
-  }
-}
-
-register({ Title }, 0);
-```
-
-2. Sub project
-
-```javascript
-import { register, components } from '@netcentric/component-loader';
-
-class Title extends components[0].Title {
-  init() {
-    console.log('level 1 Title');
-  }
-}
-
-register({ Title }, 1);
-```
-
 ### run
 
 This will run the loader on previously registered components.
@@ -184,9 +148,9 @@ This will run the loader on previously registered components.
 /**
  *  Run the loader on a element to get all attributes that corresponds to a component
  *  @param {HTMLElement} [element] root element
- *  @param {string} [initAttr] attribut name
+ *  @param {string} [prefix] CSS class name prefix
  */
-  const run = (element = window.document, initAttr = 'data-nc') => {}
+  const run = (element = window.document, prefix = 'prefix') => {}
 ```
 
 #### Examples
@@ -196,7 +160,7 @@ This will run the loader on previously registered components.
 import {
   register,
   run
-} from '@netcentric/component-loader';
+} from '@draganfilipovic/aem-component-loader';
 
 // eg components
 import { title } from 'components/title';
@@ -207,9 +171,9 @@ register({ title, text });
 // then you run so it will create if any HTMLelement with a default attribute have any component to start
 run();
 
-// Or load components only on a specific element and search a different attribute like `data-components`
+// Or load components only on a specific element
 const main = document.querySelector('main');
-run(main, 'data-components');
+run(main);
 ```
 
 ### components
@@ -221,7 +185,7 @@ If you want to access all components constructors you can just import it in any 
 
 ```javascript
 
-import { components } from '@netcentric/component-loader';
+import { components } from '@draganfilipovic/aem-component-loader';
 
 ```
 
@@ -234,7 +198,7 @@ If you want to access all the instances of components you can just import it in 
 
 ```javascript
 
-import { instances } from '@netcentric/component-loader';
+import { instances } from '@draganfilipovic/aem-component-loader';
 
 const howManyTitles = instances.title.length;
 
